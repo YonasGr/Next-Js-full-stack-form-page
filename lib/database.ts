@@ -68,4 +68,25 @@ export function getAllUsers(): UserResponse[] {
   return stmt.all() as UserResponse[];
 }
 
+// Get user by username or email (for login)
+export function getUserByUsernameOrEmail(identifier: string): User | null {
+  const stmt = db.prepare('SELECT * FROM users WHERE username = ? OR email = ?');
+  const user = stmt.get(identifier, identifier) as User | undefined;
+  return user || null;
+}
+
+// Get user by username (for login)
+export function getUserByUsername(username: string): User | null {
+  const stmt = db.prepare('SELECT * FROM users WHERE username = ?');
+  const user = stmt.get(username) as User | undefined;
+  return user || null;
+}
+
+// Get user by email (for login)
+export function getUserByEmail(email: string): User | null {
+  const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
+  const user = stmt.get(email) as User | undefined;
+  return user || null;
+}
+
 export default db;
