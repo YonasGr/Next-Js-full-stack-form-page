@@ -113,3 +113,23 @@ export function validateRegistrationForm(data: {
     errors,
   };
 }
+
+export function validateLoginForm(data: {
+  identifier: string;
+  password: string;
+}): ValidationResult {
+  const errors: ValidationError[] = [];
+  
+  if (!data.identifier || data.identifier.trim().length === 0) {
+    errors.push({ field: 'identifier', message: 'Username or email is required' });
+  }
+  
+  if (!data.password || data.password.length === 0) {
+    errors.push({ field: 'password', message: 'Password is required' });
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
+}

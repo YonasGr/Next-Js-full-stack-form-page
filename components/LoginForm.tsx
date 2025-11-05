@@ -7,13 +7,10 @@ interface FormErrors {
   [key: string]: string;
 }
 
-export default function RegistrationForm() {
+export default function LoginForm() {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
+    identifier: '',
     password: '',
-    confirmPassword: '',
-    fullName: '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -44,7 +41,7 @@ export default function RegistrationForm() {
     setSubmitMessage('');
 
     try {
-      const response = await fetch('/api/register', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,14 +53,11 @@ export default function RegistrationForm() {
 
       if (data.success) {
         setSubmitSuccess(true);
-        setSubmitMessage(data.message || 'Registration successful!');
+        setSubmitMessage(data.message || 'Login successful!');
         // Reset form
         setFormData({
-          username: '',
-          email: '',
+          identifier: '',
           password: '',
-          confirmPassword: '',
-          fullName: '',
         });
       } else {
         // Handle validation errors
@@ -74,7 +68,7 @@ export default function RegistrationForm() {
           });
           setErrors(errorMap);
         } else {
-          setSubmitMessage(data.message || 'Registration failed. Please try again.');
+          setSubmitMessage(data.message || 'Login failed. Please try again.');
         }
       }
     } catch (error) {
@@ -90,10 +84,10 @@ export default function RegistrationForm() {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Create Account
+            Welcome Back
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Fill in the details below to register
+            Sign in to your account
           </p>
         </div>
 
@@ -112,81 +106,27 @@ export default function RegistrationForm() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
-              htmlFor="fullName"
+              htmlFor="identifier"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
-              Full Name
+              Username or Email
             </label>
             <input
               type="text"
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
+              id="identifier"
+              name="identifier"
+              value={formData.identifier}
               onChange={handleChange}
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white ${
-                errors.fullName
+                errors.identifier
                   ? 'border-red-500'
                   : 'border-gray-300 dark:border-gray-600'
               }`}
-              placeholder="John Doe"
+              placeholder="johndoe or john@example.com"
             />
-            {errors.fullName && (
+            {errors.identifier && (
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                {errors.fullName}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white ${
-                errors.username
-                  ? 'border-red-500'
-                  : 'border-gray-300 dark:border-gray-600'
-              }`}
-              placeholder="johndoe"
-            />
-            {errors.username && (
-              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                {errors.username}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white ${
-                errors.email
-                  ? 'border-red-500'
-                  : 'border-gray-300 dark:border-gray-600'
-              }`}
-              placeholder="john@example.com"
-            />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                {errors.email}
+                {errors.identifier}
               </p>
             )}
           </div>
@@ -216,36 +156,6 @@ export default function RegistrationForm() {
                 {errors.password}
               </p>
             )}
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              Must be at least 8 characters with uppercase, lowercase, and number
-            </p>
-          </div>
-
-          <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white ${
-                errors.confirmPassword
-                  ? 'border-red-500'
-                  : 'border-gray-300 dark:border-gray-600'
-              }`}
-              placeholder="••••••••"
-            />
-            {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                {errors.confirmPassword}
-              </p>
-            )}
           </div>
 
           <button
@@ -255,14 +165,14 @@ export default function RegistrationForm() {
               isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
-            {isSubmitting ? 'Registering...' : 'Register'}
+            {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-          Already have an account?{' '}
-          <Link href="/login" className="text-indigo-600 hover:text-indigo-500 font-medium">
-            Sign in
+          Don&apos;t have an account?{' '}
+          <Link href="/" className="text-indigo-600 hover:text-indigo-500 font-medium">
+            Register now
           </Link>
         </div>
       </div>
