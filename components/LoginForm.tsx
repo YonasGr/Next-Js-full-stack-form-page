@@ -2,12 +2,14 @@
 
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface FormErrors {
   [key: string]: string;
 }
 
 export default function LoginForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     identifier: '',
     password: '',
@@ -59,6 +61,10 @@ export default function LoginForm() {
           identifier: '',
           password: '',
         });
+        // Redirect to dashboard after a brief delay
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000);
       } else {
         // Handle validation errors
         if (data.errors && Array.isArray(data.errors)) {
